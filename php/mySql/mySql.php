@@ -1,0 +1,32 @@
+<?php
+    //Arquivo com as senhas
+    include 'pass.php';
+    
+    //Conexão ao mySql.
+    $conexao = mysql_connect($db_adress, $db_user, $db_pass) or die('Erro conectando ao banco de dados');
+    
+    //Seleção do banco de dados.
+    $base_selected = mysql_select_db($db_name, $conexao) or die('Erro na seleção da tabela');
+    
+    //Operação no banco de dados.
+    function queryOnBD($query){
+        global $conexao;
+        $busca = mysql_query($query, $conexao) or die('Busca mal sucedida.');
+        
+        return mysql_fetch_array($busca);
+    }
+    
+    function getLastID(){
+        global $conexao;
+        $id = mysql_insert_id($conexao);
+        
+        return $id;
+    }
+    
+    //Remoção do banco de dados.
+    function closeConection(){
+        global $conexao;
+        mysql_close($conexao);
+    }
+    
+?>

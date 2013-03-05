@@ -1,0 +1,56 @@
+<link href="content/inserir.css" rel="stylesheet" type="text/css">
+<script src="content/inserir.js"></script>
+
+<div class="conteudo">
+    <!--<label for="escola">Escola: </label> <input id="escola" size=50/><br/>-->
+    <label for="escola">Escola: </label>
+        <select id="escola">
+            <option value="-1">Aguarde...</option>
+        </select><br/>
+    <label for="turma">Turma: </label>
+        <select id="turma">
+            
+        </select><br/>
+    <label for="nome">Nome: </label>
+        <select id="nome">
+            <option value="-1">Aguarde...</option>
+        </select><br/>
+
+    <!--
+    <label for="turma">Turma: </label> <input id="turma" size=50/><br/>
+    <label for="nome">Nome: </label> <input id="nome" size=50/><br/>
+    -->
+    <label for="nascimento">Data nascimento: </label> <input id="nascimento" size=10/>
+    <label for="data_medida">Data medida: </label> <input id="data_medida" size=10/><br/>
+    
+    <div id="radio">
+        Sexo:
+        <input type="radio" id="masculino" name="radio" checked="checked"/><label for="masculino">Masculino</label>
+        <input type="radio" id="feminino" name="radio"  /><label for="feminino">Feminino</label>
+    </div>
+    <br/>
+    <div id="medidas">
+        Medidas:<br/>
+        <label for="peso">Peso: </label> <input id="peso" class="numberOnly"/><br/>
+        <label for="altura">Altura: </label> <input id="altura"  class="numberOnly"/><br/>
+        <label for="imc">IMC: </label> <input readonly id="imc"  class="numberOnly"/><br/>
+        <label for="pcs">PCS: </label> <input id="pcs"  class="numberOnly"/><br/>
+        <label for="pct">PCT: </label> <input id="pct"  class="numberOnly"/><br/>
+        <label for="soma">Soma: </label> <input readonly id="soma"  class="numberOnly"/><br/>
+        <button>Adicionar</button>
+    </div>
+    
+    <div id="historico">
+        Historico:
+        <table border="1" width="600px">
+            <tr align="center" bgcolor="grey">
+                <td width="115px">Data</td><td width="85">Peso</td> <td width="85">Altura</td> <td width="85">IMC</td> <td width="85">PCS</td> <td width="85">PCT</td> <td width="85">Soma</td>
+            </tr>
+        </table>
+        <div id="conteudo_tabela">
+            <table border="1" width="600px" id=tabela>
+                
+            </table>
+        </div>
+    </div>
+</div>

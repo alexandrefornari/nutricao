@@ -1,0 +1,123 @@
+<link href="content/graficos.css" rel="stylesheet" type="text/css">
+<script src="content/graficos.js"></script>
+
+<div class="conteudo">
+    <div id="grafico1">
+        <select id="nGraficos">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <!--<option value="4">4</option>-->
+        </select>
+        <div id="labelNgraficos">
+            nº gráficos:
+        </div>
+        <table id="opcoes1" border="0" width="600px">
+            <tr align="center">
+                <td width="150">Escola</td>
+                <td width="150">Turma</td>
+                <td width="100">Sexo</td>
+                <td width="100">Nascimento</td>
+                <td width="100">Data medida</td>
+            </tr>
+            <tr align="center">
+                <td><input size=30 id="escola" /></td>
+                <td><input size=20 id="turma" /></td>
+                <td>
+                    <select id="sexo">
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                    </select>
+                </td>
+                <td><input size=10 id="nascimento2" /></td>
+                <td><input size=10 id="data" /></td>
+            </tr>
+        </table>
+        <canvas id="g1" class="esquerda" width="600" height="200">[No canvas support]</canvas>
+        <select id="eixoX1" class="direitaCima">
+            <option value="1">Peso</option>
+            <option value="2">Altura</option>
+            <option value="3">IMC</option>
+            <option value="4">PCT+PCS</option>
+        </select>
+        <canvas id="pie1" class="direita" width="250" height="200">[No canvas support]</canvas>
+    </div>
+    <div id="grafico2" style="display:none">
+        <table id="opcoes2" border="0" width="600px">
+            <tr align="center">
+                <td width=150>Escola</td>
+                <td width="150">Turma</td>
+                <td width="100">Sexo</td>
+                <td width="100">Nascimento</td>
+                <td width="100">Data medida</td>
+            </tr>
+            <tr align="center">
+                <td><input size=30 id="escola" /></td>
+                <td><input size=20 id="turma" /></td>
+                <td>
+                    <select>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                    </select>
+                </td>
+                <td><input size=10 id="nascimento2" /></td>
+                <td><input size=10 id="data" /></td>
+            </tr>
+        </table>
+        <canvas id="g2" width="600" height="200">[No canvas support]</canvas>
+        <select id="eixoX2" class="direitaCima">
+            <option value="1">Peso</option>
+            <option value="2">Altura</option>
+            <option value="3">IMC</option>
+            <option value="4">PCT+PCS</option>
+        </select>
+        <canvas id="pie2" class="direita" width="250" height="200">[No canvas support]</canvas>
+    </div>
+    <div id="grafico3" style="display:none">
+        <table id="opcoes3" border="0" width="450px">
+            <tr align="center">
+                <td width=150>Escola</td>
+                <td width="150">Turma</td>
+                <td width="100">Sexo</td>
+                <td width="100">Nascimento</td>
+                <td width="100">Data medida</td>
+            </tr>
+            <tr align="center">
+                <td><input size=30 id="escola" /></td>
+                <td><input size=20 id="turma" /></td>
+                <td>
+                    <select>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                    </select>
+                </td>
+                <td><input size=10 id="nascimento2" /></td>
+                <td><input size=10 id="data" /></td>
+            </tr>
+        </table>
+        <canvas id="g3" width="400" height="200">[No canvas support]</canvas>
+    </div>
+    <div id="grafico4" style="display:none">
+        <table id="opcoes4" border="0" width="450px">
+            <tr align="center">
+                <td width=150>Escola</td>
+                <td width="150">Turma</td>
+                <td width="100">Sexo</td>
+                <td width="100">Nascimento</td>
+                <td width="100">Data medida</td>
+            </tr>
+            <tr align="center">
+                <td><input size=30 id="escola" /></td>
+                <td><input size=20 id="turma" /></td>
+                <td>
+                    <select>
+                        <option value="masculino">Masculino</option>
+                        <option value="feminino">Feminino</option>
+                    </select>
+                </td>
+                <td><input size=10 id="nascimento2" /></td>
+                <td><input size=10 id="data" /></td>
+            </tr>
+        </table>
+        <canvas id="g4" width="400" height="200">[No canvas support]</canvas>
+    </div>
+</div>
