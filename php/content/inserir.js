@@ -9,20 +9,20 @@ Date.prototype.fullDate = function() {
 
 function init(){
     //$( "#radio" ).buttonset();
-    $( "#nascimento" ).datepicker();
-    $( "#data_medida" ).datepicker();
+    $( "#nascimento" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    $( "#data_medida" ).datepicker({ dateFormat: 'dd/mm/yy' });
     var dataAtualC = new Date();
     var yyyy = dataAtualC.getFullYear().toString();
     var mm = (dataAtualC.getMonth()+1).toString(); // getMonth() is zero-based
     var dd  = dataAtualC.getDate().toString();
     var dAtual = (dd[1]?dd:"0"+dd[0]) + "/" + (mm[1]?mm:"0"+mm[0]) + "/" + yyyy;
     $( "#data_medida" ).val(dAtual);
-    alert("ha");
     
     busca("escolas", retorno_escola);
     busca("alunosAll", retorno_aluno);
     
     $("#escola").change(seleciona_turmas);
+    $("#nome").change(seleciona_dados);
     
     /*var escolas = [];
     $( "#escola" ).autocomplete({
@@ -81,6 +81,7 @@ function insereTabela(event){
   var erro = "";
   
   var data = formataDataBRtoEN($( "#data_medida" ).val());
+  alert(data);
   
   var peso = $("#peso").val();
   if(peso == "") erro += "Você precisa digitar o peso.\n";
@@ -218,7 +219,7 @@ function seleciona_alunos(){
     
     busca("alunosTurma&id_escola=" + id_escola + "&id_turma=" + id_turma, retorno_aluno);
     
-    $("#nome").change(seleciona_dados);
+    //$("#nome").change(seleciona_dados);
 }
 
 function seleciona_dados(){
@@ -228,6 +229,8 @@ function seleciona_dados(){
     
     busca("dados&id_aluno=" + id_aluno + "&id_escola=" + id_escola + "&id_turma=" + id_turma, retorno_dados);
     busca("historico&id_aluno=" + id_aluno + "&id_escola=" + id_escola + "&id_turma=" + id_turma, retorno_historico);
+    //busca("dados&id_aluno=" + id_aluno, retorno_dados);
+    //busca("historico&id_aluno=" + id_aluno, retorno_historico);
 }
 
 function retorno_historico(){
@@ -257,10 +260,20 @@ function retorno_dados(){
                 $('#feminino').attr('disabled', 'disabled');
                 //sexo.focus();
                 //sexo.select();
-                /*
-                if(resposta[2])$( "#escola" ).html(resposta[2]);
-                if(resposta[3])$( "#turma" ).html(resposta[3]);
-                */
+                var esc = Number(resposta[2]);
+                var esc_sel = $("#escola :selected").val();
+                if(esc_sel != esc){
+                    //Seleciona a escola do aluno
+                    //$("#escola option[value=" + esc +"]").attr("selected","selected") ;
+                    //$("#escola").val(esc);
+                }
+                
+                var turm = String(resposta[3]);
+                if($("#turma :selected").val() != turm){
+                    //Seleciona a turma do aluno
+                    $("#turma").val(turm);
+                }
+                
             }else{
                 $("#nascimento").val("");
                 $("#nascimento").removeAttr("disabled");

@@ -54,7 +54,7 @@
                                     WHERE usuario.id = " .$user_id . " AND usuario_escola.id_escola = " . $id_escola;
             break;
         case "dados":
-            $sql = "SELECT aluno.nascimento, aluno.sexo FROM aluno
+            $sql = "SELECT aluno.nascimento, aluno.sexo, aluno.id_escola, aluno.id_turma FROM aluno
                     WHERE aluno.id = " . $id_aluno;
             break;
         case "historico":
@@ -89,13 +89,14 @@
             break;
         case "dados":
             while($data = mysql_fetch_array($result)){
-                $return .= "" . $data["nascimento"] . '%' . $data["sexo"];
+                $return .= "" . $data["nascimento"] . '%' . $data["sexo"] . '%' . $data["id_escola"] . '%' . $data["id_turma"];
             }
             break;
         case "historico":
             while($data = mysql_fetch_array($result)){
-                $dataBR_array = $data["data"].split("-");
-                $dataBR = "" . $dataBR_array[2] . "/" . $dataBR_array[1] . "/" . $dataBR_array[0];
+                $strData = (string)$data["data"];
+                $array = explode("-", $strData);
+                $dataBR = $array[2] . "/" . $array[1] . "/" . $array[0];
                 
                 $return .= '<tr align="center">\n'
                      . '<td width="102px">' . $dataBR . '</td>'
