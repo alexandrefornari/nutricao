@@ -18,11 +18,12 @@ function init(){
     var dAtual = (dd[1]?dd:"0"+dd[0]) + "/" + (mm[1]?mm:"0"+mm[0]) + "/" + yyyy;
     $( "#data_medida" ).val(dAtual);
     
-    busca("escolas", retorno_escola);
-    busca("alunosAll", retorno_aluno);
+    busca("escola&aux=none", retorno_escola);
+    busca("alunoAll&aux=none", retorno_aluno);
     
-    $("#escola").change(seleciona_turmas);
-    $("#nome").change(seleciona_dados);
+    $("#escola").change(mudanca_escola);
+    $("#turma").change(mudanca_turma);
+    $("#nome").change(mudanca_aluno);
     
     /*var escolas = [];
     $( "#escola" ).autocomplete({
@@ -204,8 +205,67 @@ function generateXMLHttp() {
     alert('Seu navegador não pode trabalhar com Ajax!');
 }
 
+var id_escola = -1;
+var id_turma = -1;
+var id_aluno = -1;
+
+//Escola selecionada:
+//Quando muda a escola procura-se novamente as turmas e as escolas
+//Caso a turma que estava selecionada fizer parte da nova escola selecionada isso será tratado no retorno.
+function mudanca_escola(){
+    id_escola = $("#escola :selected").val();
+    
+    busca_turmas("escola");
+    busca_alunos("escola");
+}
+
+//Turma selecionada:
+function mudanca_turma(){
+    id_turma = $("#turma :selected").val();
+    
+    if(id_escola == -1){
+        //Não tem escola selecionada
+        busca_escolas("turma");
+    }
+    busca_alunos("turma");
+}
+
+//Aluno selecionado:
+function mudanca_aluno(){
+    id_aluno = $("#nome :selected").val();
+    
+    busca_escola("aluno");
+    busca_turma("aluno");
+    busca("historico&aux=none", retorno_historico);
+}
+
+//Busca as escolas dependendo do parâmetro
+function busca_escola(param){
+    var search = "escola&aux=" + param;
+    busca(search, retorno_escola);
+}
+
+//Busca as escolas dependendo do parâmetro
+function busca_turma(param){
+    var search = "turma&aux=" + param;
+    busca(search, retorno_turma);
+}
+
+//Busca as escolas dependendo do parâmetro
+function busca_aluno(param){
+    var search = "aluno&aux=" + param;
+    busca(search, retorno_aluno);
+}
+
+
+
+//Seleciona turma relacionada ao aluno ou escola
+function seleciona_turma(){
+    
+}
+
 function seleciona_turmas(){
-    var id_escola = $("#escola :selected").val();
+    //var id_escola = $("#escola :selected").val();
     
     busca("turma&id_escola=" + id_escola, retorno_turma);
     busca("alunos&id_escola=" + id_escola, retorno_aluno);
@@ -295,23 +355,38 @@ function insere(query, funcao){
 }
 
 function busca(query, funcao) {
+    var finalQuery = "&id_escola=" +  id_escola + "&id_turma=" +  id_turma + "&id_aluno=" + id_aluno;
     var XMLHttp = generateXMLHttp();
-    XMLHttp.open("get", "./content/inserir_busca.php?campo=" + query, true);
+    XMLHttp.open("get", "./content/inserir_busca.php?campo=" + query + finalQuery, true);
     XMLHttp.onreadystatechange = funcao;
     XMLHttp.send(null);
 }
 
+function select_value_in_tag(tag, value){
+    jQuery(tag + " option").each(function(){
+        if(jQuery(this).val() == value){
+            jQuery(this).attr("selected","selected");
+            return true;
+        }
+    });
+    return false;
+}
+
 function retorno_escola(){
-    //if (XMLHttp.readyState == 4){
     if (this.readyState == 4){
-        //Informacoes recebidas
-        //if (XMLHttp.status == 200){
         if (this.status == 200){
             //Arquivo encontrado
             //result.innerHTML = XMLHttp.responseText;
             //var escolas = this.responseText;
             $( "#escola" ).html(this.responseText);
             
+            if(!select_value_in_tag("#turma", id_turma)){
+                id_turma = $("#turma :selected").val()
+            }
+            
+            if(!select_value_in_tag("#alunos", id_aluno)){
+                id_aluno = $("#aluno :selected").val()
+            }
             /*
             $( "#escola" ).autocomplete({
                 source: escolas,
@@ -331,6 +406,14 @@ function retorno_turma(){
             //var escolas = this.responseText;
             $( "#turma" ).html(this.responseText);
             
+            if(!select_value_in_tag("#escola", id_escola)){
+                id_escola = $("#escola :selected").val()
+            }
+            
+            if(!select_value_in_tag("#alunos", id_aluno)){
+                id_aluno = $("#aluno :selected").val()
+            }
+            
             /*
             $( "#escola" ).autocomplete({
                 source: escolas,
@@ -349,6 +432,14 @@ function retorno_aluno(){
         if (this.status == 200){
             //var escolas = this.responseText;
             $( "#nome" ).html(this.responseText);
+            
+            if(!select_value_in_tag("#escola", id_escola)){
+                id_escola = $("#escola :selected").val()
+            }
+            
+            if(!select_value_in_tag("#turma", id_turma)){
+                id_turma = $("#turma :selected").val()
+            }
             
             /*
             $( "#escola" ).autocomplete({

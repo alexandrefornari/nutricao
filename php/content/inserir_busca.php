@@ -8,6 +8,8 @@
     
     $user_id  = $_SESSION['user_id'];
     $busca = $_GET['campo'];
+    $aux = $_GET['aux'];
+    
     $id_escola = $_GET['id_escola'];
     $id_turma = $_GET['id_turma'];
     $id_aluno = $_GET['id_aluno'];
