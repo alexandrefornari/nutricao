@@ -18,8 +18,9 @@ function init(){
     var dAtual = (dd[1]?dd:"0"+dd[0]) + "/" + (mm[1]?mm:"0"+mm[0]) + "/" + yyyy;
     $( "#data_medida" ).val(dAtual);
     
-    busca("escola&aux=none", retorno_escola);
-    busca("alunoAll&aux=none", retorno_aluno);
+    busca_escola("none");
+	busca_turma("none");
+    busca_aluno("none");
     
     $("#escola").change(mudanca_escola);
     $("#turma").change(mudanca_turma);
@@ -127,9 +128,16 @@ function insereTabela(event){
 }
 
 function retorno_insere_historico(){
-  //alert("resposta: " + this.responseText);
   limpaValoresMedidas();
-  seleciona_dados();
+}
+
+function limpaValoresMedidas(){
+    $("#peso").val("");
+    $("#altura").val("");
+    $("#imc").val("");
+    $("#pcs").val("");
+    $("#pct").val("");
+    $("#soma").val("");
 }
 
 function verificaNumero(tag){
@@ -157,32 +165,14 @@ function calculaSoma(){
     $("#soma").val(soma);
 }
 
+/*
 function changeEscola(event, ui){
     //alert(event.target.id);
     var value = ui.item.value;
     
     //Buscar BD Turmas
 }
-
-function validate(evt) {
-  var theEvent = evt || window.event;
-  var key = theEvent.keyCode || theEvent.which;
-  key = String.fromCharCode( key );
-  var regex = /[0-9]|\./;
-  if( !regex.test(key) ) {
-    theEvent.returnValue = false;
-    if(theEvent.preventDefault) theEvent.preventDefault();
-  }
-}
-
-function limpaValoresMedidas(){
-    $("#peso").val("");
-    $("#altura").val("");
-    $("#imc").val("");
-    $("#pcs").val("");
-    $("#pct").val("");
-    $("#soma").val("");
-}
+*/
 
 function generateXMLHttp() {
     if (typeof XMLHttpRequest != "undefined"){
@@ -213,31 +203,39 @@ var id_aluno = -1;
 //Quando muda a escola procura-se novamente as turmas e as escolas
 //Caso a turma que estava selecionada fizer parte da nova escola selecionada isso será tratado no retorno.
 function mudanca_escola(){
-    id_escola = $("#escola :selected").val();
-    
-    busca_turmas("escola");
-    busca_alunos("escola");
+  id_escola = $("#escola :selected").val();
+  if(id_escola == -1){
+    busca_turma("none");
+    busca_aluno("none");
+  }else{
+    busca_turma("escola");
+    busca_aluno("escola");
+  }
 }
 
 //Turma selecionada:
 function mudanca_turma(){
     id_turma = $("#turma :selected").val();
     
-    if(id_escola == -1){
-        //Não tem escola selecionada
-        busca_escolas("turma");
-    }
-    busca_alunos("turma");
+	if(id_turma == -1){
+		busca_aluno("none");
+	}else{
+		busca_aluno("turma");
+	}
 }
 
 //Aluno selecionado:
 function mudanca_aluno(){
     id_aluno = $("#nome :selected").val();
-    
-    busca_escola("aluno");
-    busca_turma("aluno");
+    //busca_escola("aluno");
+    //busca_turma("aluno");
+    busca("dados&aux=none", retorno_dados);
     busca("historico&aux=none", retorno_historico);
 }
+
+
+//----------------------------------------------------------------------------------------------------------------------------------
+
 
 //Busca as escolas dependendo do parâmetro
 function busca_escola(param){
@@ -258,119 +256,8 @@ function busca_aluno(param){
 }
 
 
+//-----------------------------------------------------------------------------------------------------------------------
 
-//Seleciona turma relacionada ao aluno ou escola
-function seleciona_turma(){
-    
-}
-
-function seleciona_turmas(){
-    //var id_escola = $("#escola :selected").val();
-    
-    busca("turma&id_escola=" + id_escola, retorno_turma);
-    busca("alunos&id_escola=" + id_escola, retorno_aluno);
-    
-    $("#turma").change(seleciona_alunos);
-}
-
-function seleciona_alunos(){
-    var id_escola = $("#escola :selected").val();
-    var id_turma = $("#turma :selected").val();
-    
-    busca("alunosTurma&id_escola=" + id_escola + "&id_turma=" + id_turma, retorno_aluno);
-    
-    //$("#nome").change(seleciona_dados);
-}
-
-function seleciona_dados(){
-    var id_escola = $("#escola :selected").val();
-    var id_turma = $("#turma :selected").val();
-    var id_aluno = $("#nome :selected").val();
-    
-    busca("dados&id_aluno=" + id_aluno + "&id_escola=" + id_escola + "&id_turma=" + id_turma, retorno_dados);
-    busca("historico&id_aluno=" + id_aluno + "&id_escola=" + id_escola + "&id_turma=" + id_turma, retorno_historico);
-    //busca("dados&id_aluno=" + id_aluno, retorno_dados);
-    //busca("historico&id_aluno=" + id_aluno, retorno_historico);
-}
-
-function retorno_historico(){
-    if (this.readyState == 4){
-        if (this.status == 200){
-            $("#tabela").html(this.responseText);
-        } else {
-            //Erro
-            result.innerHTML = "Um erro ocorreu: " + this.statusText;
-        }
-    }
-}
-
-function retorno_dados(){
-    if (this.readyState == 4){
-        if (this.status == 200){
-            var resposta = this.responseText;
-            if(resposta != ""){
-                var r = resposta.split("%");
-                
-                $("#nascimento").val(formataDataENtoBR(r[0]));
-                $("#nascimento").prop('disabled', 'disabled');
-                //var sexo = document.getElementById(r[1]);
-                var tag = '#' + r[1];
-                $(tag).prop('checked', true);//.button("refresh");
-                $('#masculino').attr('disabled', 'disabled');
-                $('#feminino').attr('disabled', 'disabled');
-                //sexo.focus();
-                //sexo.select();
-                var esc = Number(resposta[2]);
-                var esc_sel = $("#escola :selected").val();
-                if(esc_sel != esc){
-                    //Seleciona a escola do aluno
-                    //$("#escola option[value=" + esc +"]").attr("selected","selected") ;
-                    //$("#escola").val(esc);
-                }
-                
-                var turm = String(resposta[3]);
-                if($("#turma :selected").val() != turm){
-                    //Seleciona a turma do aluno
-                    $("#turma").val(turm);
-                }
-                
-            }else{
-                $("#nascimento").val("");
-                $("#nascimento").removeAttr("disabled");
-                $('#masculino').removeAttr("disabled");
-                $('#feminino').removeAttr("disabled");
-            }
-        } else {
-            //Erro
-            result.innerHTML = "Um erro ocorreu: " + this.statusText;
-        }
-    }
-}
-
-function insere(query, funcao){
-  var XMLHttp = generateXMLHttp();
-    XMLHttp.open("get", "./content/inserir_insere.php?campo=" + query, true);
-    XMLHttp.onreadystatechange = funcao;
-    XMLHttp.send(null);
-}
-
-function busca(query, funcao) {
-    var finalQuery = "&id_escola=" +  id_escola + "&id_turma=" +  id_turma + "&id_aluno=" + id_aluno;
-    var XMLHttp = generateXMLHttp();
-    XMLHttp.open("get", "./content/inserir_busca.php?campo=" + query + finalQuery, true);
-    XMLHttp.onreadystatechange = funcao;
-    XMLHttp.send(null);
-}
-
-function select_value_in_tag(tag, value){
-    jQuery(tag + " option").each(function(){
-        if(jQuery(this).val() == value){
-            jQuery(this).attr("selected","selected");
-            return true;
-        }
-    });
-    return false;
-}
 
 function retorno_escola(){
     if (this.readyState == 4){
@@ -378,7 +265,7 @@ function retorno_escola(){
             //Arquivo encontrado
             //result.innerHTML = XMLHttp.responseText;
             //var escolas = this.responseText;
-            $( "#escola" ).html(this.responseText);
+            $("#escola").html(this.responseText);
             
             if(!select_value_in_tag("#turma", id_turma)){
                 id_turma = $("#turma :selected").val()
@@ -433,14 +320,6 @@ function retorno_aluno(){
             //var escolas = this.responseText;
             $( "#nome" ).html(this.responseText);
             
-            if(!select_value_in_tag("#escola", id_escola)){
-                id_escola = $("#escola :selected").val()
-            }
-            
-            if(!select_value_in_tag("#turma", id_turma)){
-                id_turma = $("#turma :selected").val()
-            }
-            
             /*
             $( "#escola" ).autocomplete({
                 source: escolas,
@@ -452,5 +331,98 @@ function retorno_aluno(){
             result.innerHTML = "Um erro ocorreu: " + this.statusText;
         }
     }
+}
+
+function retorno_dados(){
+    if (this.readyState == 4){
+        if (this.status == 200){
+            var resposta = this.responseText;
+            if(resposta != ""){
+                var r = resposta.split("%");
+                
+                $("#nascimento").val(formataDataENtoBR(r[0]));
+                $("#nascimento").prop('disabled', 'disabled');
+                
+                $('#' + r[1]).prop('checked', true);//.button("refresh");
+                $('#masculino').attr('disabled', 'disabled');
+                $('#feminino').attr('disabled', 'disabled');
+                
+                id_escola = r[2];
+                if($("#escola :selected").val() != id_escola){
+                    //Seleciona a turma do aluno
+                    $("#escola").val(id_escola);
+                }
+                
+                id_turma = r[3];
+                busca("turma&aux=escola", function(){
+                  if (this.readyState == 4){
+                    if (this.status == 200){
+                        $("#turma").html(this.responseText);
+                        $("#turma").val(id_turma);
+                    }
+                  }
+                });
+                
+                busca("aluno&aux=escolaTurma", function(){
+                  if (this.readyState == 4){
+                    if (this.status == 200){
+                        $("#nome").html(this.responseText);
+                        $("#nome").val(id_aluno);
+                    }
+                  }
+                });
+                
+            }else{
+                $("#nascimento").val("");
+                $("#nascimento").removeAttr("disabled");
+                $('#masculino').removeAttr("disabled");
+                $('#feminino').removeAttr("disabled");
+            }
+        } else {
+            //Erro
+            result.innerHTML = "Um erro ocorreu: " + this.statusText;
+        }
+    }
+}
+
+function retorno_historico(){
+    if (this.readyState == 4){
+        if (this.status == 200){
+            $("#tabela").html(this.responseText);
+        } else {
+            //Erro
+            result.innerHTML = "Um erro ocorreu: " + this.statusText;
+        }
+    }
+}
+
+function select_value_in_tag(tag, value){
+  var achou = false;
+    $(tag + " option").each(function(){
+        if($(this).val() == value){
+	    //alert(tag + ": achou um valor");
+            $(this).attr("selected","selected");
+            achou = true;
+            return true;
+        }
+        return false;
+    });
+    
+    return achou;
+}
+
+function insere(query, funcao){
+  var XMLHttp = generateXMLHttp();
+    XMLHttp.open("get", "./content/inserir_insere.php?campo=" + query, true);
+    XMLHttp.onreadystatechange = funcao;
+    XMLHttp.send(null);
+}
+
+function busca(query, funcao) {
+    var finalQuery = "&id_escola=" +  id_escola + "&id_turma=" +  id_turma + "&id_aluno=" + id_aluno;
+    var XMLHttp = generateXMLHttp();
+    XMLHttp.open("get", "./content/inserir_busca.php?campo=" + query + finalQuery, true);
+    XMLHttp.onreadystatechange = funcao;
+    XMLHttp.send(null);
 }
 

@@ -24,49 +24,6 @@
     $sql  = "";
     
     switch($busca){
-        case "escolas":
-            $sql = "SELECT escola.id, escola.nome FROM escola
-                    INNER JOIN usuario_escola ON
-                       escola.id =  usuario_escola.id_escola
-                    INNER JOIN usuario ON
-                        usuario_escola.id_user = usuario.id
-                                WHERE usuario.id = " .$id_user;
-            break;
-        case "turma":
-            /*$sql = "SELECT DISTINCT aluno.id_turma FROM aluno
-                    WHERE aluno.id_escola = " .$id_escola;*/
-            $sql = "SELECT DISTINCT turma.id, turma.nome FROM turma
-                    INNER JOIN aluno ON aluno.id_turma = turma.id
-                            WHERE aluno.id_escola = " .$id_escola;
-            break;
-        case "alunosAll":
-            $sql = "SELECT aluno.id, aluno.nome FROM aluno
-                    INNER JOIN usuario_escola
-                            ON aluno.id_escola = usuario_escola.id_escola
-                    INNER JOIN usuario
-                            ON usuario_escola.id_user = usuario.id
-                                    WHERE usuario.id = " . $id_user;
-            break;
-         case "alunos":
-            $sql = "SELECT aluno.id, aluno.nome FROM aluno
-                    INNER JOIN usuario_escola
-                            ON aluno.id_escola = usuario_escola.id_escola
-                    INNER JOIN usuario
-                            ON usuario_escola.id_user = usuario.id
-                                    WHERE usuario.id = " . $id_user . " AND usuario_escola.id_escola = " . $id_escola;
-            break;
-        case "alunosTurma":
-            $sql = "SELECT aluno.id, aluno.nome FROM aluno
-                    INNER JOIN usuario_escola
-                            ON aluno.id_escola = usuario_escola.id_escola
-                    INNER JOIN usuario
-                            ON usuario_escola.id_user = usuario.id
-                                    WHERE usuario.id = " . $id_user . " AND usuario_escola.id_escola = " . $id_escola;
-            break;
-        case "dados":
-            $sql = "SELECT aluno.nascimento, aluno.sexo FROM aluno
-                    WHERE aluno.id = " . $id_aluno;
-            break;
         case "historico":
             $sql = "INSERT INTO medida (data, peso, altura, imc, pcs, pct, soma, id_aluno)
                     VALUES (" . $data . ", " . $peso  . ", "  . $altura  . ", " . $imc  . ", " . $pcs  . ", " . $pct  . ", " . $soma . ", " . $id_aluno . ")";
