@@ -17,70 +17,68 @@
     
     switch($busca){
         case "escola":
-			switch($aux){
-				case "none":
-					$sql = "SELECT escola.id, escola.nome FROM escola
-							INNER JOIN usuario_escola ON
-							   escola.id =  usuario_escola.id_escola
-							INNER JOIN usuario ON
-								usuario_escola.id_user = usuario.id
-										WHERE usuario.id = " .$user_id;
-					break;
-				case "turma":
-					$sql = "SELECT escola.id, escola.nome FROM escola
-							INNER JOIN escola_turma ON escola_turma.id_escola = escola.id
-							WHERE escola_turma.id_turma = " . $id_turma;
-					break;
-				case "aluno":
-					$sql = "SELECT escola.id, escola.nome FROM escola
-							INNER JOIN aluno ON aluno.id_escola = escola.id
-							WHERE aluno.id = " .$id_aluno;
-					break;
-			}
+            switch($aux){
+                case "none":
+                    $sql = "SELECT escola.id, escola.nome FROM escola
+                            INNER JOIN usuario_escola ON escola.id =  usuario_escola.id_escola
+                            INNER JOIN usuario ON usuario_escola.id_user = usuario.id
+                            WHERE usuario.id = " .$user_id;
+                    break;
+                case "turma":
+                    $sql = "SELECT escola.id, escola.nome FROM escola
+                            INNER JOIN escola_turma ON escola_turma.id_escola = escola.id
+                            WHERE escola_turma.id_turma = " . $id_turma;
+                    break;
+                case "aluno":
+                    $sql = "SELECT escola.id, escola.nome FROM escola
+                            INNER JOIN aluno ON aluno.id_escola = escola.id
+                            WHERE aluno.id = " .$id_aluno;
+                    break;
+            }
             break;
         case "turma":
-			switch($aux){
-				case "none":
-					$sql = "SELECT DISTINCT turma.id, turma.nome FROM turma
-							INNER JOIN escola_turma ON escola_turma.id_turma = turma.id
-							INNER JOIN escola ON escola.id = escola_turma.id_escola
-							INNER JOIN usuario_escola ON escola.id = usuario_escola.id_escola
-							INNER JOIN usuario ON usuario_escola.id_user = usuario.id
-							WHERE usuario.id = " .$user_id;
-					break;
-				case "escola":
-					$sql = "SELECT turma.id, turma.nome FROM turma
-							INNER JOIN escola_turma ON escola_turma.id_turma = turma.id
-							WHERE escola_turma.id_escola = " . $id_escola;
-					break;
-				case "aluno":
-					$sql = "SELECT turma.id, turma.nome FROM turma
-							INNER JOIN aluno ON aluno.id_turma = turma.id
-							WHERE aluno.id = " .$id_aluno;
-					break;
-			}
+            switch($aux){
+                case "none":
+                    $sql = "SELECT DISTINCT turma.id, turma.nome FROM turma
+                            INNER JOIN escola_turma ON escola_turma.id_turma = turma.id
+                            INNER JOIN escola ON escola.id = escola_turma.id_escola
+                            INNER JOIN usuario_escola ON escola.id = usuario_escola.id_escola
+                            INNER JOIN usuario ON usuario_escola.id_user = usuario.id
+                            WHERE usuario.id = " .$user_id;
+                    break;
+                case "escola":
+                    $sql = "SELECT turma.id, turma.nome FROM turma
+                            INNER JOIN escola_turma ON escola_turma.id_turma = turma.id
+                            WHERE escola_turma.id_escola = " . $id_escola;
+                    break;
+                case "aluno":
+                    $sql = "SELECT turma.id, turma.nome FROM turma
+                            INNER JOIN aluno ON aluno.id_turma = turma.id
+                            WHERE aluno.id = " .$id_aluno;
+                    break;
+            }
             break;
         case "aluno":
-			switch($aux){
-				case "none":
-					$sql = "SELECT aluno.id, aluno.nome FROM aluno
-							INNER JOIN usuario_escola ON aluno.id_escola = usuario_escola.id_escola
-							INNER JOIN usuario ON usuario_escola.id_user = usuario.id
-							WHERE usuario.id = " .$user_id;
-					break;
-				case "escola":
-					$sql = "SELECT aluno.id, aluno.nome FROM aluno
-							WHERE aluno.id_escola = " . $id_escola;
-					break;
-				case "turma":
-					$sql = "SELECT aluno.id, aluno.nome FROM aluno
-							WHERE aluno.id_turma = " . $id_turma;
-                                        break;
-                                case "escolaTurma":
-					$sql = "SELECT aluno.id, aluno.nome FROM aluno
-							WHERE aluno.id_turma = " . $id_turma . " AND aluno.id_escola = " . $id_escola;
-					break;
-			}
+            switch($aux){
+                case "none":
+                    $sql = "SELECT aluno.id, aluno.nome FROM aluno
+                            INNER JOIN usuario_escola ON aluno.id_escola = usuario_escola.id_escola
+                            INNER JOIN usuario ON usuario_escola.id_user = usuario.id
+                            WHERE usuario.id = " .$user_id;
+                    break;
+                case "escola":
+                    $sql = "SELECT aluno.id, aluno.nome FROM aluno
+                            WHERE aluno.id_escola = " . $id_escola;
+                    break;
+                case "turma":
+                    $sql = "SELECT aluno.id, aluno.nome FROM aluno
+                            WHERE aluno.id_turma = " . $id_turma;
+                    break;
+                case "escolaTurma":
+                    $sql = "SELECT aluno.id, aluno.nome FROM aluno
+                            WHERE aluno.id_turma = " . $id_turma . " AND aluno.id_escola = " . $id_escola;
+                    break;
+            }
             
             break;
         case "dados":

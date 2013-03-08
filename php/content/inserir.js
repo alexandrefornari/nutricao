@@ -217,11 +217,13 @@ function mudanca_escola(){
 function mudanca_turma(){
     id_turma = $("#turma :selected").val();
     
-	if(id_turma == -1){
-		busca_aluno("none");
-	}else{
-		busca_aluno("turma");
-	}
+    if(id_turma == -1){
+        if(id_escola == -1) busca_aluno("none");
+        else busca_aluno("escola");
+    }else{
+        if(id_escola == -1) busca_aluno("turma");
+        else busca_aluno("escolaTurma");
+    }
 }
 
 //Aluno selecionado:
@@ -412,7 +414,7 @@ function select_value_in_tag(tag, value){
 }
 
 function insere(query, funcao){
-  var XMLHttp = generateXMLHttp();
+    var XMLHttp = generateXMLHttp();
     XMLHttp.open("get", "./content/inserir_insere.php?campo=" + query, true);
     XMLHttp.onreadystatechange = funcao;
     XMLHttp.send(null);
