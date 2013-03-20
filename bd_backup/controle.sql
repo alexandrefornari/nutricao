@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS `aluno` (
   `sexo` varchar(10) CHARACTER SET latin1 NOT NULL,
   `id_escola` int(5) NOT NULL,
   `id_turma` int(5) NOT NULL,
+  `id_grupo` int(5) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
@@ -40,26 +41,13 @@ CREATE TABLE IF NOT EXISTS `aluno` (
 -- Extraindo dados da tabela `aluno`
 --
 
-INSERT INTO `aluno` (`id`, `nome`, `nascimento`, `sexo`, `id_escola`, `id_turma`) VALUES
-(1, 'Alexandre', '2012-11-20', 'masculino', 3, 1),
-(2, 'Ricardo', '2013-03-15', 'masculino', 3, 1),
-(3, 'Bia', '2012-10-30', 'feminino', 3, 1),
-(4, 'Livia', '2012-05-24', 'feminino', 4, 2),
-(5, 'João', '2011-08-16', 'masculino', 4, 2),
-(6, 'Neide', '2013-06-14', 'feminino', 5, 3);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `aluno_medida`
---
-
-CREATE TABLE IF NOT EXISTS `aluno_medida` (
-  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
-  `id_aluno` int(10) unsigned NOT NULL,
-  `id_medida` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+INSERT INTO `aluno` (`id`, `nome`, `nascimento`, `sexo`, `id_escola`, `id_turma`, `id_grupo`) VALUES
+(1, 'Alexandre', '2012-11-20', 'masculino', 3, 1, 1),
+(2, 'Ricardo', '2013-03-15', 'masculino', 3, 1, 1),
+(3, 'Bia', '2012-10-30', 'feminino', 3, 1, 1),
+(4, 'Livia', '2012-05-24', 'feminino', 4, 2, 1),
+(5, 'João', '2011-08-16', 'masculino', 4, 2, 1),
+(6, 'Neide', '2013-06-14', 'feminino', 5, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -71,6 +59,7 @@ CREATE TABLE IF NOT EXISTS `escola` (
   `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
   `nome` varchar(50) CHARACTER SET latin1 NOT NULL,
   `endereço` varchar(50) CHARACTER SET latin1 DEFAULT NULL,
+  `id_grupo` int(5) unsigned NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
@@ -78,65 +67,32 @@ CREATE TABLE IF NOT EXISTS `escola` (
 -- Extraindo dados da tabela `escola`
 --
 
-INSERT INTO `escola` (`id`, `nome`, `endereço`) VALUES
-(3, 'COC Sistema de Ensino', NULL),
-(4, 'SEB COC', NULL),
-(5, 'USP', NULL),
-(6, 'UNESP', NULL),
-(7, 'UNICAMP', NULL);
+INSERT INTO `escola` (`id`, `nome`, `endereço`, `id_grupo`) VALUES
+(3, 'COC Sistema de Ensino', NULL, 1),
+(4, 'SEB COC', NULL, 1),
+(5, 'USP', NULL, 1),
+(6, 'UNESP', NULL, 1),
+(7, 'UNICAMP', NULL, 2);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `escola_aluno`
+-- Estrutura da tabela `grupo`
 --
 
-CREATE TABLE IF NOT EXISTS `escola_aluno` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `id_escola` int(5) NOT NULL,
-  `id_aluno` int(10) NOT NULL,
+CREATE TABLE IF NOT EXISTS `grupo` (
+  `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
+  `nome` varchar(20) NOT NULL,
+  `master` int(5) unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
 
 --
--- Extraindo dados da tabela `escola_aluno`
+-- Extraindo dados da tabela `grupo`
 --
 
-INSERT INTO `escola_aluno` (`id`, `id_escola`, `id_aluno`) VALUES
-(1, 3, 1),
-(2, 3, 2),
-(3, 3, 3),
-(4, 4, 4),
-(5, 4, 5),
-(6, 5, 6);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `escola_turma`
---
-
-CREATE TABLE IF NOT EXISTS `escola_turma` (
-  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
-  `id_escola` int(5) unsigned NOT NULL,
-  `id_turma` int(5) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
-
---
--- Extraindo dados da tabela `escola_turma`
---
-
-INSERT INTO `escola_turma` (`id`, `id_escola`, `id_turma`) VALUES
-(1, 3, 1),
-(2, 3, 2),
-(3, 3, 3),
-(4, 3, 4),
-(5, 4, 1),
-(6, 4, 2),
-(7, 4, 3),
-(8, 4, 4),
-(9, 5, 1);
+INSERT INTO `grupo` (`id`, `nome`, `master`) VALUES
+(1, 'Grupo teste', 1);
 
 -- --------------------------------------------------------
 
@@ -196,99 +152,26 @@ INSERT INTO `turma` (`id`, `nome`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `turma_aluno`
---
-
-CREATE TABLE IF NOT EXISTS `turma_aluno` (
-  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
-  `id_turma` int(5) unsigned NOT NULL,
-  `id_aluno` int(10) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
-
---
--- Extraindo dados da tabela `turma_aluno`
---
-
-INSERT INTO `turma_aluno` (`id`, `id_turma`, `id_aluno`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 1, 3),
-(4, 2, 4),
-(5, 2, 5),
-(6, 3, 6);
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `turma_aluno_escola`
---
-
-CREATE TABLE IF NOT EXISTS `turma_aluno_escola` (
-  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
-  `id_turma` int(5) NOT NULL,
-  `id_aluno` int(10) NOT NULL,
-  `id_escola` int(5) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
-
---
--- Extraindo dados da tabela `turma_aluno_escola`
---
-
-INSERT INTO `turma_aluno_escola` (`id`, `id_turma`, `id_aluno`, `id_escola`) VALUES
-(1, 1, 1, 3),
-(2, 1, 2, 3),
-(3, 1, 3, 3),
-(4, 2, 4, 4),
-(5, 2, 5, 4),
-(6, 3, 6, 5);
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `usuario`
 --
 
 CREATE TABLE IF NOT EXISTS `usuario` (
   `id` int(5) unsigned NOT NULL AUTO_INCREMENT,
+  `id_grupo` int(5) unsigned NOT NULL,
   `nome` varchar(50) NOT NULL,
   `login` varchar(50) NOT NULL,
   `senha` varchar(30) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
 
 --
 -- Extraindo dados da tabela `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `nome`, `login`, `senha`) VALUES
-(1, 'teste', 'teste', 'teste'),
-(2, 'teste2', 'teste2', 'teste2');
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `usuario_escola`
---
-
-CREATE TABLE IF NOT EXISTS `usuario_escola` (
-  `id` int(15) unsigned NOT NULL AUTO_INCREMENT,
-  `id_user` int(5) unsigned NOT NULL,
-  `id_escola` int(5) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
-
---
--- Extraindo dados da tabela `usuario_escola`
---
-
-INSERT INTO `usuario_escola` (`id`, `id_user`, `id_escola`) VALUES
-(1, 1, 3),
-(2, 1, 4),
-(3, 1, 5),
-(4, 2, 6),
-(5, 2, 7);
+INSERT INTO `usuario` (`id`, `id_grupo`, `nome`, `login`, `senha`) VALUES
+(1, 1, 'teste', 'teste', 'teste'),
+(2, 1, 'teste2', 'teste2', 'teste2'),
+(3, 2, 'teste3', 'teste3', 'teste3');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

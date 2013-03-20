@@ -1,7 +1,7 @@
 <?php
     session_start();
     
-    if(!isset($_SESSION["user_auth"]) && !isset($SESSION["user_id"])){
+    if(!isset($_SESSION["user_auth"]) && !isset($_SESSION["user_id"]) && !isset($_SESSION["grupo"])){
         session_destroy();
         header("Location: ../index.php");
     }
@@ -9,6 +9,7 @@
     $busca = $_GET['campo'];
     
     $id_user  =     $_SESSION['user_id'];
+    $id_grupo =     $_SESSION['grupo'];
     $id_escola =    $_GET['id_escola'];
     $id_turma =     $_GET['id_turma'];
     $id_aluno =     $_GET['id_aluno'];

@@ -2,10 +2,11 @@
     //Caso não exista o id ou rep na variável global SESSION redireciona para o index.php
     session_start();
     
-    if(!isset($_SESSION["user_auth"]) && !isset($SESSION["user_id"])){
+    if(!isset($_SESSION['user_auth']) && !isset($_SESSION['user_id']) && !isset($_SESSION['grupo'])){
         session_destroy();
         header("Location: ../index.php");
     }
+    
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +47,29 @@
                 <li><a href="content/inserir.html" id="inserir">Inserir</a></li>
                 <li><a href="content/graficos.html" id="graficos">Gráficos</a></li>
                 <li><a href="content/gerenciar.html" id="gerenciar">Gerenciar</a></li>
+                <?php
+                    $user = "root";
+                    $pass = "";
+                    $host = "localhost";
+                    $base = "controle";
+                    $conexao = mysql_connect($host, $user, $pass);
+                    mysql_select_db($base);
+                    
+                    $id_grupo = $_SESSION['grupo'];
+                    $id_user = $_SESSION['user_id'];
+                    
+                    $sql = "SELECT grupo.master FROM grupo WHERE grupo.id=" . $id_grupo;
+                    $result = mysql_query($sql);
+                    
+                    mysql_close($conexao);
+                    
+                    $data = mysql_fetch_array($result);
+                    $master = $data['master'];
+                    
+                    if($master == $id_user){
+                        echo('<li><a href="content/gerenciarUsers.html" id="gerenciarUsers">Gerenciar Usuários</a></li>');
+                    }
+                ?>
             </ul>
         </div>
     </div>

@@ -1,7 +1,7 @@
 <?php
     session_start();
     
-    if(isset($_SESSION["user_auth"]) && !isset($SESSION["user_id"])){
+    if(isset($_SESSION['user_auth']) && isset($_SESSION['user_id']) && isset($_SESSION['grupo'])){
         header("Location: php/inicial.php");
     }else{
         session_destroy();
