@@ -6,7 +6,9 @@
     <label for="escola">Escola: </label>
         <select id="escola">
             <option value="-1">Aguarde...</option>
-        </select><br/>
+        </select>
+        <input type="button" id="openAddEscolaScr" value=" + " />
+        <br/>
     <label for="turma">Turma: </label>
         <select id="turma">
             <option value="-1">Aguarde...</option>
@@ -14,7 +16,9 @@
     <label for="nome">Nome: </label>
         <select id="nome">
             <option value="-1">Aguarde...</option>
-        </select><br/>
+        </select>
+        <input type="button" id="openAddAlunoScr" value=" + " />
+        <br/>
 
     <!--
     <label for="turma">Turma: </label> <input id="turma" size=50/><br/>
@@ -37,7 +41,8 @@
         <label for="pcs">PCS: </label> <input id="pcs"  class="numberOnly"/><br/>
         <label for="pct">PCT: </label> <input id="pct"  class="numberOnly"/><br/>
         <label for="soma">Soma: </label> <input readonly id="soma"  class="numberOnly"/><br/>
-        <button>Adicionar</button>
+        <!--<button id="inserir">Adicionar</button>-->
+        <input type="button" id="adicionar" value="Adicionar" />
     </div>
     
     <div id="historico">
@@ -53,4 +58,24 @@
             </table>
         </div>
     </div>
+    
+    
+    <div id="insereAluno" style="display:none">
+        <label for="inNomeAluno">Nome: </label> <input id="inNomeAluno" class="numberOnly"/><br/>
+        <label for="inNascimento">Data nascimento: </label> <input id="inNascimento"  class="numberOnly"/><br/>
+        <div id="inRadio">
+            Sexo:
+            <input type="radio" id="inMasculino" name="inradio" checked="checked"/><label for="inMasculino">Masculino</label>
+            <input type="radio" id="inFeminino" name="inradio"  /><label for="inFeminino">Feminino</label>
+        </div>
+        <label for="inEscola">Escola: </label> <input readonly id="inEscola"  class="numberOnly"/><br/>
+        <label for="inTurma">Turma: </label> <input id="inTurma"  class="numberOnly"/><br/>
+    </div>
+    
+    
+    <div id="insereEscola" style="display:none">
+        <label for="inNomeEscola">Nome: </label> <input id="inNomeEscola" class="numberOnly"/><br/>
+        <label for="inEndereco">Endereço: </label> <input id="inEndereco"  class="numberOnly"/><br/>
+    </div>
+    
 </div>

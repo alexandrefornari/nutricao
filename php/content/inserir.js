@@ -18,8 +18,53 @@ function init(){
     var dAtual = (dd[1]?dd:"0"+dd[0]) + "/" + (mm[1]?mm:"0"+mm[0]) + "/" + yyyy;
     $( "#data_medida" ).val(dAtual);
     
+    $("#insereAluno").dialog({
+        dialogClass: "no-close",
+        draggable: false,
+        width: 500,
+        height: 350,
+        modal: true,
+        position: { my: "center center", at: "center" },
+        resizable: false,
+        title: "Inserir aluno",
+        buttons: [
+          {
+            text: "OK",
+            click: onInsereAluno
+          },
+          {
+            text: "Cancelar",
+            click: cancelInsereAluno
+          }
+        ]
+    });
+    
+    $("#insereEscola").dialog({
+        dialogClass: "no-close",
+        draggable: false,
+        width: 500,
+        height: 350,
+        modal: true,
+        position: { my: "center center", at: "center" },
+        resizable: false,
+        title: "Inserir escola",
+        buttons: [
+          {
+            text: "OK",
+            click: onInsereEscola
+          },
+          {
+            text: "Cancelar",
+            click: cancelInsereEscola
+          }
+        ]
+    });
+    
+    $("#insereAluno").dialog( "close" );
+    $("#insereEscola").dialog( "close" );
+    
     busca_escola("none");
-	busca_turma("none");
+    busca_turma("none");
     busca_aluno("none");
     
     $("#escola").change(mudanca_escola);
@@ -62,7 +107,34 @@ function init(){
         }
     });
     
-    $("button").button().click(insereTabela);
+    $("#adicionar").button().click(insereTabela);
+    $("#openAddAlunoScr").click(openAddAlunoScreen);
+    $("#openAddEscolaScr").click(openAddEscolaScreen);
+    
+}
+
+function openAddAlunoScreen(){
+    $("#insereAluno").dialog().show("slow");
+}
+
+function openAddEscolaScreen(){
+    $("#insereEscola").dialog().show("slow");
+}
+
+function onInsereAluno(){
+    
+}
+
+function cancelInsereAluno(){
+    $("#insereAluno").dialog( "close" );
+}
+
+function onInsereEscola(){
+    
+}
+
+function cancelInsereEscola(){
+    $("#insereEscola").dialog("close");
 }
 
 function formataDataBRtoEN(dataBr){
