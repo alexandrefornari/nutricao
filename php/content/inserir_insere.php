@@ -10,26 +10,38 @@
     
     $id_user  =     $_SESSION['user_id'];
     $id_grupo =     $_SESSION['grupo'];
+    
     $id_escola =    $_GET['id_escola'];
     $id_turma =     $_GET['id_turma'];
     $id_aluno =     $_GET['id_aluno'];
-    
-    $data =     $_GET['data'];
-    $peso =     $_GET['peso'];
-    $altura =   $_GET['altura'];
-    $imc =      $_GET['imc'];
-    $pcs =      $_GET['pcs'];
-    $pct =      $_GET['pct'];
-    $soma =     $_GET['soma'];
     
     $sql  = "";
     
     switch($busca){
         case "historico":
+            $data =     $_GET['data'];
+            $peso =     $_GET['peso'];
+            $altura =   $_GET['altura'];
+            $imc =      $_GET['imc'];
+            $pcs =      $_GET['pcs'];
+            $pct =      $_GET['pct'];
+            $soma =     $_GET['soma'];
+            
             $sql = "INSERT INTO medida (data, peso, altura, imc, pcs, pct, soma, id_aluno)
                     VALUES (" . $data . ", " . $peso  . ", "  . $altura  . ", " . $imc  . ", " . $pcs  . ", " . $pct  . ", " . $soma . ", " . $id_aluno . ")";
             break;
-        
+        case "escola":
+            $nomeEscola =   $_GET['nomeEscola'];
+            
+            if(isset($_GET['endEscola'])){
+                $endEscola =   $_GET['endEscola'];
+                $sql = "INSERT INTO escola (nome, endereco, id_grupo)
+                        VALUES (". $nomeEscola . ", " . $endEscola . ", " . $id_grupo . ")";
+            }else{
+                $sql = "INSERT INTO escola (nome, id_grupo)
+                        VALUES (". $nomeEscola . ", " . $id_grupo . ")";
+            }
+            break;
     }
     
     $user = "root";
@@ -39,7 +51,14 @@
     $conexao = mysql_connect($host, $user, $pass);
     mysql_select_db($base);
     
-    $result = mysql_query($sql);
+    //$result = mysql_query($sql);
+    
+    if (!mysql_query($sql))
+    {
+        echo "fail";
+    }else{
+        echo "ok";
+    }
     
     mysql_close($conexao);
     

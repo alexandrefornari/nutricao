@@ -130,11 +130,32 @@ function cancelInsereAluno(){
 }
 
 function onInsereEscola(){
+    var query = "escola";
     
+    var nomeEscola = $("#inNomeEscola").val();
+    var endEscola = $("#inEndereco").val();
+    
+    query += "&nomeEscola='" + nomeEscola + "'";;
+    if(endEscola != "") query += "&endEscola='" + endEscola + "'";
+    
+    query += "&id_aluno=" + id_aluno + "&id_escola=" + id_escola + "&id_turma=" + id_turma;
+    
+    insere(query, retorno_insere_escola);
+}
+
+function retorno_insere_escola() {
+  $("#insereEscola").dialog( "close" );
+  //alert(this.responseText);
+  if (this.responseText == "ok") {
+    busca_escola("none");
+  }else{
+    alert("Ocorreu um erro ao inserir a escola. Verifique sua conexão e tente novamente.");
+  }
 }
 
 function cancelInsereEscola(){
     $("#insereEscola").dialog("close");
+    
 }
 
 function formataDataBRtoEN(dataBr){
@@ -155,7 +176,6 @@ function insereTabela(event){
   var erro = "";
   
   var data = formataDataBRtoEN($( "#data_medida" ).val());
-  alert(data);
   
   var peso = $("#peso").val();
   if(peso == "") erro += "Você precisa digitar o peso.\n";
@@ -200,7 +220,12 @@ function insereTabela(event){
 }
 
 function retorno_insere_historico(){
-  limpaValoresMedidas();
+  if(this.responseText == "ok"){
+    limpaValoresMedidas();
+    busca("historico&aux=none", retorno_historico);
+  }else{
+    alert("Ocorreu um erro ao inserir as medidas. Verifique sua conexão e tente novamente.");
+  }
 }
 
 function limpaValoresMedidas(){
@@ -340,6 +365,10 @@ function retorno_escola(){
             //result.innerHTML = XMLHttp.responseText;
             //var escolas = this.responseText;
             $("#escola").html(this.responseText);
+            
+            if(!select_value_in_tag("#escola", id_escola)){
+                id_escola = $("#escola :selected").val()
+            }
             
             if(!select_value_in_tag("#turma", id_turma)){
                 id_turma = $("#turma :selected").val()
