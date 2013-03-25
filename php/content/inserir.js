@@ -11,6 +11,8 @@ function init(){
     //$( "#radio" ).buttonset();
     $( "#nascimento" ).datepicker({ dateFormat: 'dd/mm/yy' });
     $( "#data_medida" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    $( "#inNascimento" ).datepicker({ dateFormat: 'dd/mm/yy' });
+    
     var dataAtualC = new Date();
     var yyyy = dataAtualC.getFullYear().toString();
     var mm = (dataAtualC.getMonth()+1).toString(); // getMonth() is zero-based
@@ -67,6 +69,9 @@ function init(){
     busca_turma("none");
     busca_aluno("none");
     
+    busca_escola_insere("none");
+    busca_turma_insere("all");
+    
     $("#escola").change(mudanca_escola);
     $("#turma").change(mudanca_turma);
     $("#nome").change(mudanca_aluno);
@@ -122,7 +127,40 @@ function openAddEscolaScreen(){
 }
 
 function onInsereAluno(){
+    var query = "aluno";
+    var erro = "";
+    var nomeAluno = $("#inNomeAluno").val();
+    if(nomeAluno == "") erro += "Você precisa digitar o nome do aluno.\n"
+    var nascimento = formataDataBRtoEN($("#inNascimento").val());
+    if(nascimento == "") erro += "Você precisa digitar a data de nascimento."
+    var sexo = ($("#inMasculino").prop('checked') ? "masculino" : "feminino");
+    var escola = $("#inEscola").val();
+    var turma = $("#inTurma").val();
     
+    if(erro == ""){
+        query += "&nomeAluno='" + nomeAluno + "'";
+        query += "&nasc='" + nascimento + "'";
+        query += "&sexo='" + sexo + "'";
+        if(escola != -1) query += "&inEscola='" + escola + "'";
+        if(turma != -1) query += "&inTurma='" + turma + "'";
+        
+        query += "&id_aluno=" + id_aluno + "&id_escola=" + id_escola + "&id_turma=" + id_turma;
+        
+        insere(query, retorno_insere_aluno);
+    }else{
+        alert(erro);
+    }
+    
+}
+
+function retorno_insere_aluno() {
+  //alert(this.responseText);
+  if (this.responseText == "ok") {
+    $("#insereAluno").dialog( "close" );
+    busca_aluno("none");
+  }else{
+    alert("Ocorreu um erro ao inserir o aluno. Verifique sua conexão e tente novamente.");
+  }
 }
 
 function cancelInsereAluno(){
@@ -144,9 +182,9 @@ function onInsereEscola(){
 }
 
 function retorno_insere_escola() {
-  $("#insereEscola").dialog( "close" );
   //alert(this.responseText);
   if (this.responseText == "ok") {
+    $("#insereEscola").dialog( "close" );
     busca_escola("none");
   }else{
     alert("Ocorreu um erro ao inserir a escola. Verifique sua conexão e tente novamente.");
@@ -354,6 +392,18 @@ function busca_aluno(param){
     busca(search, retorno_aluno);
 }
 
+//Busca as escolas dependendo do parâmetro
+function busca_escola_insere(param){
+    var search = "escola&aux=" + param;
+    busca(search, retorno_escola_insere);
+}
+
+//Busca as escolas dependendo do parâmetro
+function busca_turma_insere(param){
+    var search = "turma&aux=" + param;
+    busca(search, retorno_turma_insere);
+}
+
 
 //-----------------------------------------------------------------------------------------------------------------------
 
@@ -417,11 +467,51 @@ function retorno_turma(){
     }
 }
 
+function retorno_escola_insere(){
+    if (this.readyState == 4){
+        if (this.status == 200){
+            //Arquivo encontrado
+            //result.innerHTML = XMLHttp.responseText;
+            //var escolas = this.responseText;
+            $("#inEscola").html(this.responseText);
+            
+        } else {
+            //Erro
+            result.innerHTML = "Um erro ocorreu: " + this.statusText;
+        }
+    }
+}
+
+function retorno_turma_insere(){
+    if (this.readyState == 4){
+        if (this.status == 200){
+            //var escolas = this.responseText;
+            $( "#inTurma" ).html(this.responseText);
+            
+        } else {
+            //Erro
+            result.innerHTML = "Um erro ocorreu: " + this.statusText;
+        }
+    }
+}
+
 function retorno_aluno(){
     if (this.readyState == 4){
         if (this.status == 200){
             //var escolas = this.responseText;
             $( "#nome" ).html(this.responseText);
+            
+            if(!select_value_in_tag("#escola", id_escola)){
+                id_escola = $("#escola :selected").val()
+            }
+            
+            if(!select_value_in_tag("#turma", id_turma)){
+                id_turma = $("#turma :selected").val()
+            }
+            
+            if(!select_value_in_tag("#alunos", id_aluno)){
+                id_aluno = $("#aluno :selected").val()
+            }
             
             /*
             $( "#escola" ).autocomplete({
@@ -516,7 +606,7 @@ function select_value_in_tag(tag, value){
 
 function insere(query, funcao){
     var XMLHttp = generateXMLHttp();
-    XMLHttp.open("get", "./content/inserir_insere.php?campo=" + query, true);
+    XMLHttp.open("get", "./content/inserir_insere.php?campo=" + query, false);
     XMLHttp.onreadystatechange = funcao;
     XMLHttp.send(null);
 }

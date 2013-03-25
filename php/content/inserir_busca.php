@@ -52,6 +52,9 @@
                             INNER JOIN aluno ON aluno.id_turma = turma.id
                             WHERE aluno.id = " .$id_aluno . " AND aluno.id_grupo = " .$group_id;
                     break;
+                case "all":
+                    $sql = "SELECT turma.id, turma.nome FROM turma";
+                    break;
             }
             break;
         case "aluno":

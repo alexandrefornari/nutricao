@@ -42,6 +42,29 @@
                         VALUES (". $nomeEscola . ", " . $id_grupo . ")";
             }
             break;
+        case "aluno":
+            $nomeAluno =   $_GET['nomeAluno'];
+            $nascimento =   $_GET['nasc'];
+            $sexo =   $_GET['sexo'];
+            
+            if(isset($_GET['inEscola']) && isset($_GET['inTurma'])){
+                $inEscoloa = $_GET['inEscola'];
+                $inTurma = $_GET['inTurma'];
+                $sql = "INSERT INTO aluno (nome, nascimento, sexo, id_escola, id_turma, id_grupo)
+                        VALUES (". $nomeAluno . ", " . $nascimento . ", " . $sexo . ", " . $inEscoloa . ", " . $inTurma . ", " . $id_grupo . ")";
+            }else if(isset($_GET['inEscola'])){
+                $inEscoloa = $_GET['inEscola'];
+                $sql = "INSERT INTO aluno (nome, nascimento, sexo, id_escola, id_grupo)
+                        VALUES (". $nomeAluno . ", " . $nascimento . ", " . $sexo . ", " . $inEscoloa . ", " . $id_grupo . ")";
+            }else if(isset($_GET['inTurma'])){
+                $inTurma = $_GET['inTurma'];
+                $sql = "INSERT INTO aluno (nome, nascimento, sexo, id_turma, id_grupo)
+                        VALUES (". $nomeAluno . ", " . $nascimento . ", " . $sexo . ", " . $inTurma . ", " . $id_grupo . ")";
+            }else{
+                $sql = "INSERT INTO aluno (nome, nascimento, sexo, id_grupo)
+                        VALUES (". $nomeAluno . ", " . $nascimento . ", " . $sexo . ", " . $id_grupo . ")";
+            }
+            break;
     }
     
     $user = "root";
