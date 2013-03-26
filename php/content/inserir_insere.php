@@ -80,7 +80,8 @@
     {
         echo "fail";
     }else{
-        echo "ok";
+        echo mysql_insert_id();
+        //echo "ok";
     }
     
     mysql_close($conexao);

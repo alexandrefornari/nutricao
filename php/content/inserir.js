@@ -183,11 +183,12 @@ function onInsereEscola(){
 
 function retorno_insere_escola() {
   //alert(this.responseText);
-  if (this.responseText == "ok") {
-    $("#insereEscola").dialog( "close" );
-    busca_escola("none");
-  }else{
+  if (this.responseText == "fail") {
     alert("Ocorreu um erro ao inserir a escola. Verifique sua conexão e tente novamente.");
+  }else{
+    $("#insereEscola").dialog( "close" );
+    id_escola = this.responseText;
+    busca_escola("none");
   }
 }
 
